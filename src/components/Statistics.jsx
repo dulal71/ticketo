@@ -1,4 +1,4 @@
-"use client";
+
 
 export default function Statistics({ stats }) {
   return (

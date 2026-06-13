@@ -2,21 +2,27 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI );
-const db = client.db(process.env.DB_NAME);
+
+
+const client = new MongoClient(process.env.MONGO_DB_URI);
+const db = client.db(process.env.AUTH_DB_NAME);
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
-    client,
+    // Optional: if you don't provide a client, database transactions won't be enabled.
+    client
   }),
-  emailAndPassword: {
-    enabled: true
-  },
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "placeholder-google-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "placeholder-google-client-secret"
+   emailAndPassword: { 
+    enabled: true, 
+  }, 
+  user:{
+    additionalFields:{
+      role:{
+        default:'Attendee'
+      },
+      isBlocked:{
+        defaultValue:false
+      }
     }
-  },
- 
+  }
 });
