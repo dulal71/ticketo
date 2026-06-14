@@ -19,7 +19,7 @@ export default function Navbar() {
   //session data
   const { data : session,isPending}=authClient.useSession()
 const user = session?.user
-console.log(user);
+
 
  const isLoggedIn = user ? true: false
 
@@ -68,7 +68,7 @@ console.log(user);
           </Link>
           {isLoggedIn && (
             <Link
-              href={"/"}
+              href={"/dashboard"}
               className={`text-sm font-medium transition-colors ${pathname.startsWith("/dashboard") ? "text-pink-500 font-semibold" : "text-slate-300 hover:text-white"}`}
             >
               Dashboard
