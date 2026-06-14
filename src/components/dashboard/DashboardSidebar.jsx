@@ -97,7 +97,7 @@ const navItems=userNavLinks[user?.role || 'Attendee']
   </>
     return (
         <>
-        <div className="sticky top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
+        <div className=" top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
  <Logo></Logo>
         </div>
        
