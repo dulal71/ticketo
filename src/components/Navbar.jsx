@@ -9,9 +9,10 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { router } from "better-auth/api";
+import LogoutButton from "./LogoutButton";
 
 export default function Navbar() {
-  const router=useRouter()
+ 
  const pathname = usePathname();
  
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -35,12 +36,7 @@ const user = session?.user
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout =async() => {
-    await authClient.signOut();
-   setDropdownOpen(false);
-    alert("Logged Out! (Design Only)");
-    router.push('/login')
-  };
+  
 
 
 
@@ -147,13 +143,7 @@ const user = session?.user
 
                   <div className="border-t border-white/5 my-1.5" />
 
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/5 transition cursor-pointer"
-                  >
-                    <FaSignOutAlt className="text-sm shrink-0 text-red-400" />
-                    <span>Log Out</span>
-                  </button>
+                  <LogoutButton  setDropdownOpen={setDropdownOpen}></LogoutButton>
                 </div>
               )}
             </div>

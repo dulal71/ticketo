@@ -10,6 +10,7 @@ import Link from "next/link";
 import Logo from "../Logo";
 import { ImMenu } from "react-icons/im";
 import Image from "next/image";
+import LogoutButton from "../LogoutButton";
 
 const DashboardSidebar =async () => {
   const user = await getSession()
@@ -40,7 +41,7 @@ const userNavLinks = {
   Attendee: attendeeLinks,
   Organizer: organizerLinks
 };
-const navItems=userNavLinks[user?.role || 'seeker']
+const navItems=userNavLinks[user?.role || 'Attendee']
   const navLink=<>
   <div className="mt-auto py-5 border-b border-default  flex items-center gap-3 px-3">
       {user?.image ? (
@@ -91,13 +92,7 @@ const navItems=userNavLinks[user?.role || 'seeker']
 
       {/* Sign Out Button/Link */}
    
-      <Link
-        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-danger hover:bg-danger/10 transition-colors"
-        href="/" 
-      >
-        <LuLogOut className="size-5" />
-        Sign Out
-      </Link>
+      <LogoutButton ></LogoutButton>
               </nav>
   </>
     return (
@@ -122,7 +117,6 @@ const navItems=userNavLinks[user?.role || 'seeker']
         <Drawer.Content placement="left">
           <Drawer.Dialog>
             <Drawer.CloseTrigger />
-           
             <Drawer.Body >
               {navLink}
             </Drawer.Body>
