@@ -1,5 +1,5 @@
 
-import { getSession } from "@/lib/api/userSession";
+
 import { LuLayoutDashboard, LuUser, LuCalendarDays, LuSettings, LuCalendar, LuHistory, LuCirclePlus, LuLogOut, LuChrome } from "react-icons/lu";
 import { MdOutlineCreditCard } from "react-icons/md";
 import { FiUsers, FiClipboard } from "react-icons/fi";
@@ -11,6 +11,7 @@ import Logo from "../Logo";
 import { ImMenu } from "react-icons/im";
 import Image from "next/image";
 import LogoutButton from "../LogoutButton";
+import { getSession } from "@/lib/api/userSession";
 
 const DashboardSidebar =async () => {
   const user = await getSession()
@@ -23,8 +24,9 @@ const attendeeLinks = [
 
 const organizerLinks = [
   { icon: LuLayoutDashboard, href: "/dashboard/organizer", label: "Overview" },
+   { icon: LuCirclePlus, href: "/dashboard/organizer/add-organization", label: "Add Organization"},
   { icon: LuSettings, href: "/dashboard/organizer/settings", label: "Organization Settings" },
-  { icon: LuCirclePlus, href: "/dashboard/organizer/events/new", label: "Add Event" },
+  { icon: LuCirclePlus, href: "/dashboard/organizer/events/new-event", label: "Add Event" },
   { icon: LuCalendar, href: "/dashboard/organizer/events", label: "Manage Events" },
   { icon: FiClipboard, href: "/dashboard/organizer/bookings", label: "Booking List per Event" },
 ];
@@ -97,7 +99,7 @@ const navItems=userNavLinks[user?.role || 'Attendee']
   </>
     return (
         <>
-        <div className=" top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
+        <div className="sticky h-[75px]  top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
  <Logo></Logo>
         </div>
        

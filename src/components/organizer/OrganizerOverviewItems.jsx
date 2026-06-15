@@ -10,11 +10,11 @@ const OrganizerOverviewItems = () => {
         totalSoldTickets: 780,
     };
 
-    const isPremium = true;
+    const isPremium = false;
 
     return (
-        <div className="space-y-6 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-6 mt-6 p-5 md:p-10 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card className="glass border-white/5" radius="lg">
                     <Card.Content className="p-6 flex flex-row items-center justify-between">
                         <div className="space-y-1">

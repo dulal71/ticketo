@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Card, Button, Link, TextField, Label, InputGroup, Input, RadioGroup, Radio } from "@heroui/react";
 import { Eye, EyeSlash, Person, At, ShieldKeyhole, ArrowUpToLine } from "@gravity-ui/icons";
-import Logo from "@/components/Logo";
 import { authClient } from "@/lib/auth-client";
 
 export default function SignupPage() {
@@ -12,7 +11,7 @@ export default function SignupPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("Attendee"); 
-
+const plan = role === 'Organizer'?'organization_free':'attendee_free'
     // User Image States
     const [userImageUrl, setUserImageUrl] = useState("");
     const [isUploading, setIsUploading] = useState(false);
@@ -28,7 +27,7 @@ export default function SignupPage() {
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
-   
+   // upload user image
     const handleImageUpload = async(e) => {
         const file = e.target.files[0];
         if (file) {
@@ -63,6 +62,7 @@ setImageError("Network error during image upload");
            
     };
 
+    // sign up
     const handleSignup = async (e) => {
         e.preventDefault();
         setError("");
@@ -72,7 +72,7 @@ setImageError("Network error during image upload");
         try {
  console.log({ name, email, password, userImageUrl, role });
             const {data , error: authError}=await authClient.signUp.email({
-              name, email, password, image: userImageUrl, role  
+              name, email, password, image: userImageUrl, role ,plan 
             })
            if(authError){
             setError(authError.message || "Something went wrong during signup.");

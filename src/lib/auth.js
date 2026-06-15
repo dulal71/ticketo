@@ -22,6 +22,9 @@ export const auth = betterAuth({
       },
       isBlocked:{
         defaultValue:false
+      },
+      plan:{
+        default:'organization_free'
       }
     }
   }
