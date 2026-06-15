@@ -7,6 +7,7 @@ import { getSession } from "@/lib/api/userSession";
 const AddOrganizations =async () => {
     const user =await getSession()
      const organization=await getOrganization(user?.id)
+     console.log(organization);
     return (
         <div className="md:mt-6 p-5 md:p-10">
           <OrganizationForm organizer={user} initialOrganization={organization}></OrganizationForm> 

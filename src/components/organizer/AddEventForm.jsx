@@ -11,32 +11,62 @@ import {
 import { 
   FiCalendar, 
   FiMapPin, 
-  FiTag, 
   FiDollarSign, 
   FiUsers, 
-  FiImage, 
   FiPlusCircle 
 } from "react-icons/fi";
 
-export default function AddEventForm() {
+import { addEvent } from "@/lib/action/addEvent";
+import { LuArrowUpToLine } from "react-icons/lu";
+
+export default function AddEventForm({organization}) {
+  const [bannerImage,setBannerImage]=useState("")
+   const [imageError, setImageError] = useState("");
+   const [isUploading, setIsUploading] = useState("");
   const [formData, setFormData] = useState({
-    title: "",
-    category: "",
+title: "",
+    category: "tech", 
     location: "",
     date: "",
     ticketPrice: "",
     seats: "",
-    bannerImage: null,
     status: "pending",
   });
+  
+  const handleImageUpload = async(e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                setImageError("File size exceeds 5MB");
+                return;
+            }
+            setIsUploading(true);
+        setImageError("");
+        const formData = new FormData();
+        formData.append('image', file);
+            try{
+                const IMGBB_API_KEY=process.env. NEXT_PUBLIC_IMAGE_API_KEY
+const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,{
+method:"POST",
+body:formData
+})
+const data = await res.json()
+console.log(data);
+if(data.success){
+   setBannerImage(data.data.url)
+    setImageError('')
+}else{
+     setImageError("Upload failed. Try again.");
+}
+            }catch(err){
+setImageError("Network error during image upload");
+            }finally{
+ setIsUploading(false);
+            }
+        }
+           
+    };
 
-  const categories = [
-    { label: "Music", value: "music" },
-    { label: "Tech", value: "tech" },
-    { label: "Sports", value: "sports" },
-    { label: "Arts", value: "arts" },
-    { label: "Business", value: "business" },
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,12 +77,23 @@ export default function AddEventForm() {
     setFormData((prev) => ({ ...prev, bannerImage: e.target.files[0] }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    console.log("Submitted Event Data:", formData);
+    const eventData ={
+      ...formData,
+     organization_id:organization._id,
+      bannerImage
+    }
+    const res = await addEvent(eventData)
+if(res.insertedId){
+  alert('Add Event Successfully')
+}else{
+  alert('something went wrong try again')
+}
   };
 
-  // Dark Premium Theme Classes
+  // Dark Premium Theme Classes 
+ 
   const textInputClass = "w-full text-white bg-[#1c1c1e] border border-zinc-800 hover:bg-[#242426] focus:border-zinc-600 rounded-lg h-12 px-3 text-sm placeholder:text-zinc-600 outline-none transition-all";
   const triggerClasses = "w-full flex items-center justify-between bg-[#1c1c1e] border border-zinc-800 hover:bg-[#242426] h-12 rounded-lg px-3 text-white transition-all text-sm outline-none data-[focused=true]:border-zinc-600";
   const popoverClasses = "bg-[#1c1c1e] border border-zinc-800 text-white rounded-lg shadow-xl p-1";
@@ -82,7 +123,7 @@ export default function AddEventForm() {
           <div className="flex flex-col gap-1 w-full">
             <Label className="text-zinc-400 font-medium text-sm">Event Title</Label>
             <Input
-              isRequired
+              required
               name="title"
               placeholder="e.g., Tech Innovators Summit 2026"
               value={formData.title}
@@ -92,31 +133,19 @@ export default function AddEventForm() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Category Select */}
-            <Select 
-              className="w-full" 
-              placeholder="Select a category"
-              isRequired
-              onSelectionChange={(keys) => {
-                const selectedValue = Array.from(keys)[0];
-                setFormData(prev => ({ ...prev, category: selectedValue }));
-              }}
-            >
-              <Label className="text-zinc-400 font-medium text-sm mb-1 block">Category</Label>
-              <Select.Trigger className={triggerClasses} startContent={<FiTag className="text-zinc-600 mr-1" />}>
-                <Select.Value className="text-white placeholder:text-zinc-600" />
-                <Select.Indicator />
-              </Select.Trigger>
-              <Select.Popover className={popoverClasses}>
-                <ListBox className="outline-none">
-                  {categories.map((cat) => (
-                    <ListBox.Item id={cat.value} textValue={cat.label} key={cat.value} className={listItemClasses}>
-                      {cat.label}
-                    </ListBox.Item>
-                  ))}
-                </ListBox>
-              </Select.Popover>
-            </Select>
+            
+        <div className="flex flex-col gap-1 w-full">
+            <Label className="text-zinc-400 font-medium text-sm">category</Label>
+            <Input
+              required
+              name="category"
+              placeholder="Enter category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className={textInputClass}
+            />
+          </div>
+          
 
             {/* Date */}
             <div className="flex flex-col gap-1 w-full">
@@ -124,7 +153,7 @@ export default function AddEventForm() {
               <div className="relative flex items-center">
                 <FiCalendar className="absolute left-3 text-zinc-600 pointer-events-none z-10" />
                 <Input
-                  isRequired
+                  required
                   type="datetime-local"
                   name="date"
                   value={formData.date}
@@ -141,7 +170,7 @@ export default function AddEventForm() {
             <div className="relative flex items-center">
               <FiMapPin className="absolute left-3 text-zinc-600 pointer-events-none z-10" />
               <Input
-                isRequired
+                required
                 name="location"
                 placeholder="e.g., Grand Ballroom, New York or Virtual"
                 value={formData.location}
@@ -158,15 +187,17 @@ export default function AddEventForm() {
               <div className="relative flex items-center">
                 <FiDollarSign className="absolute left-3 text-zinc-600 pointer-events-none z-10" />
                 <Input
-                  isRequired
+                  required
                   type="number"
                   name="ticketPrice"
                   placeholder="0.00"
                   value={formData.ticketPrice}
                   onChange={handleInputChange}
                   className={`${textInputClass} pl-10 pr-12`}
-                  endContent={<span className="absolute right-3 text-zinc-600 text-xs">USD</span>}
                 />
+                <span className="absolute right-3 text-zinc-600 text-xs font-medium pointer-events-none select-none z-10">
+                  USD
+                </span>
               </div>
             </div>
 
@@ -176,7 +207,7 @@ export default function AddEventForm() {
               <div className="relative flex items-center">
                 <FiUsers className="absolute left-3 text-zinc-600 pointer-events-none z-10" />
                 <Input
-                  isRequired
+                  required
                   type="number"
                   name="seats"
                   placeholder="e.g., 150"
@@ -189,28 +220,31 @@ export default function AddEventForm() {
           </div>
 
           {/* Banner Image Upload */}
-          <div className="flex flex-col gap-2 w-full">
-            <Label className="text-zinc-400 font-medium text-sm">
-              Banner Image <span className="text-red-500">*</span>
-            </Label>
-            <div className="flex items-center justify-center w-full">
-              <label className="flex flex-col items-center justify-center w-full h-32 border border-dashed rounded-xl cursor-pointer border-zinc-800 hover:border-zinc-600 bg-[#1c1c1e]/50 hover:bg-[#242426]/50 transition-all">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <FiImage className="w-8 h-8 text-zinc-600 mb-2" />
-                  <p className="text-sm text-zinc-400">
-                    {formData.bannerImage ? formData.bannerImage.name : "Click to upload event banner"}
-                  </p>
-                </div>
-                <input 
-                  type="file" 
-                  className="hidden" 
-                  accept="image/*"
-                  required
-                  onChange={handleFileChange} 
-                />
-              </label>
-            </div>
-          </div>
+          <div className="flex flex-col gap-1 w-full">
+                            <span className="text-zinc-400 font-medium text-sm">Event Image</span>
+                            <div className="flex items-center gap-4 mt-1">
+                                <label className="w-60 h-14 border border-dashed border-zinc-700 hover:border-zinc-500 bg-zinc-900/40 rounded-xl flex flex-col items-center justify-center cursor-pointer transition-colors group relative overflow-hidden">
+                                    <input 
+                                        type="file" 
+                                        accept="image/png, image/jpeg" 
+                                        onChange={handleImageUpload} 
+                                        className="hidden" 
+                                    />
+                                    {bannerImage ? (
+                                        <img src={bannerImage} alt="Logo Preview" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <LuArrowUpToLine size={18} className="text-zinc-400 group-hover:text-zinc-200 transition-colors" />
+                                    )}
+                                </label>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium text-zinc-300">
+                                        {isUploading ? 'Uploading file...' : 'Upload image'}
+                                    </span>
+                                    <span className="text-xs text-zinc-600 mt-0.5">PNG, JPG up to 5MB</span>
+                                    {imageError && <span className="text-xs text-danger mt-1">{imageError}</span>}
+                                </div>
+                            </div>
+                        </div>
 
           <p className="text-xs text-zinc-500 italic pt-2">
             * Newly created events are automatically set to pending status until admin approval.
