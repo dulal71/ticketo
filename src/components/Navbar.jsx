@@ -5,11 +5,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FaTicketAlt, FaUser, FaSignOutAlt, FaThLarge } from "react-icons/fa";
 import Logo from "./Logo";
-import ThemeSwitcher from "./ThemeSwitcher";
+
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { router } from "better-auth/api";
 import LogoutButton from "./LogoutButton";
+import { ThemeSwitch } from "./ThemeSwitch";
+
+
 
 export default function Navbar() {
  
@@ -43,7 +46,7 @@ const user = session?.user
 
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
+    <nav className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-white/5 bg-white/60 dark:bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* LOGO */}
         <Logo />
@@ -74,7 +77,7 @@ const user = session?.user
 
         {/* RIGHT ACTIONS */}
         <div className="flex items-center gap-4">
-
+         <ThemeSwitch></ThemeSwitch>
 
           {!isLoggedIn && (
             <div className="flex items-center gap-3">

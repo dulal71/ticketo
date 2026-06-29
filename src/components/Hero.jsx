@@ -18,7 +18,7 @@ const Hero = () => {
                 </div>
 
                 <h1
-                    className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight"
+                    className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-600 leading-tight dark:text-white"
                 >
                     Discover Premium Events &{" "}
                     <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
@@ -28,7 +28,7 @@ const Hero = () => {
                 </h1>
 
                 <p
-                    className="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+                    className="dark:text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
                 >
                     Ticketo links passionate organizers with eager attendees. Browse local festivals, grand music nights, elite business seminars, and everything in between.
                 </p>
@@ -47,12 +47,13 @@ const Hero = () => {
                     </Link>
                     <Link href="/">
                         <Button
-                            variant="bordered"
-                            className="border-white/10 hover:bg-white/5 hover:border-white/20 text-white font-semibold h-14 px-8 text-md w-full sm:w-auto border-2"
-                            radius="full"
+                   variant="bordered"
+  
+                   className="border-neutral-400 dark:border-white/10 hover:bg-neutral-100 dark:hover:bg-white/5 hover:border-neutral-300 dark:hover:border-white/20 text-gray-900 dark:text-white font-semibold h-14 px-8 text-md w-full sm:w-auto border-2"
+                    radius="full"
                         >
-                            Create Organization
-                        </Button>
+                    Create Organization
+                     </Button>
                     </Link>
                 </div>
             </div>
