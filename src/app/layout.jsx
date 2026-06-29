@@ -1,4 +1,5 @@
 
+import { ToastContainer } from "react-toastify";
 import "./globals.css";
 
 export const metadata = {
@@ -13,7 +14,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col bg-[#080c16] text-[#f3f4f6]">
       
         <main className="flex-grow flex flex-col">{children}</main>
-      
+      <ToastContainer />
       </body>
     </html>
   );

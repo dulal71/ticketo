@@ -6,6 +6,8 @@ import { Eye, EyeSlash, At, ShieldKeyhole } from "@gravity-ui/icons";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { sendEmail } from "@/lib/api/sendEmil";
+import { BiUser } from "react-icons/bi";
 
 const Login = () => {
   
@@ -14,6 +16,7 @@ const Login = () => {
    const router=useRouter()
     // Form fields
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
     // UI States
@@ -45,7 +48,8 @@ const Login = () => {
                 setEmail("");
                 setPassword("");
                 router.push(redirectTo)
-
+             const res = await sendEmail({email,name})
+             console.log(res);
             }
         } catch (err) {
             setError("An unexpected network error occurred.");
@@ -66,7 +70,19 @@ const Login = () => {
 
                 {/* Form Body */}
                 <form onSubmit={handleSignin} className="flex flex-col gap-5">
-
+                {/* Name */}
+                <TextField isRequired name="name" type="text" className="flex flex-col gap-1.5">
+                        <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Name</Label>
+                        <InputGroup className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 bg-zinc-50 dark:bg-zinc-900 focus-within:border-primary transition-colors">
+                            <BiUser className="text-zinc-400 pointer-events-none" size={16} />
+                            <Input
+                                placeholder="Enter Your name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full bg-transparent py-2 text-sm outline-none border-none text-zinc-900 dark:text-zinc-100"
+                            />
+                        </InputGroup>
+                    </TextField>
                     {/* Email Field */}
                     <TextField isRequired name="email" type="email" className="flex flex-col gap-1.5">
                         <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Email Address</Label>

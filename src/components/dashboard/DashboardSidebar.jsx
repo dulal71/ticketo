@@ -39,7 +39,7 @@ const adminLinks = [
   { icon: IoBarChartOutline, href: "/dashboard/admin/analytics", label: "System Analytics" },
 ];
 const userNavLinks = {
-  Admin: adminLinks,
+  admin: adminLinks,
   Attendee: attendeeLinks,
   Organizer: organizerLinks
 };
