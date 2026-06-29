@@ -1,5 +1,6 @@
-import RegistrationForm from "@/components/auth/RegistrationForm";
+
 import { Suspense } from "react";
+import RegistrationForm from "./RegistrationForm";
 
 
 export default function SignupPage() {
