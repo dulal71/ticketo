@@ -1,48 +1,17 @@
-
-
-import { LuLayoutDashboard, LuUser, LuCalendarDays, LuSettings, LuCalendar, LuHistory, LuCirclePlus, LuLogOut, LuChrome } from "react-icons/lu";
-import { MdOutlineCreditCard } from "react-icons/md";
-import { FiUsers, FiClipboard } from "react-icons/fi";
-import { IoBarChartOutline } from "react-icons/io5";
 import {Button, Drawer} from "@heroui/react";
-
 import Link from "next/link";
 import Logo from "../Logo";
 import { ImMenu } from "react-icons/im";
 import Image from "next/image";
 import LogoutButton from "../LogoutButton";
 import { getSession } from "@/lib/api/userSession";
+import { ThemeSwitch } from "../ThemeSwitch";
+import { userNavLinks } from "./SidebarLinks";
+import { LuChrome } from "react-icons/lu";
 
 const DashboardSidebar =async () => {
   const user = await getSession()
-const attendeeLinks = [
-  { icon: LuLayoutDashboard, href: "/dashboard/attendee", label: "Overview Stats" },
-  { icon: LuUser, href: "/dashboard/attendee/profile", label: "Profile Update" },
-  { icon: LuCalendarDays, href: "/dashboard/attendee/bookings", label: "Booking History" },
-  { icon: MdOutlineCreditCard, href: "/dashboard/attendee/payments", label: "Payment History" },
-];
 
-const organizerLinks = [
-  { icon: LuLayoutDashboard, href: "/dashboard/organizer", label: "Overview" },
-   { icon: LuCirclePlus, href: "/dashboard/organizer/add-organization", label: "Add Organization"},
-  { icon: LuSettings, href: "/dashboard/organizer/settings", label: "Organization Settings" },
-  { icon: LuCirclePlus, href: "/dashboard/organizer/events/new-event", label: "Add Event" },
-  { icon: LuCalendar, href: "/dashboard/organizer/events", label: "Manage Events" },
-  { icon: FiClipboard, href: "/dashboard/organizer/bookings", label: "Booking List per Event" },
-];
-
-const adminLinks = [
-  { icon: LuLayoutDashboard, href: "/dashboard/admin", label: "Platform Overview Stats" },
-  { icon: FiUsers, href: "/dashboard/admin/users", label: "User Management" },
-  { icon: LuSettings, href: "/dashboard/admin/moderation", label: "Event Moderation" },
-  { icon: LuHistory, href: "/dashboard/admin/transactions", label: "Transaction History" },
-  { icon: IoBarChartOutline, href: "/dashboard/admin/analytics", label: "System Analytics" },
-];
-const userNavLinks = {
-  admin: adminLinks,
-  Attendee: attendeeLinks,
-  Organizer: organizerLinks
-};
 const navItems=userNavLinks[user?.role || 'Attendee']
   const navLink=<>
   <div className="mt-auto py-5 border-b border-default  flex items-center gap-3 px-3">
@@ -99,9 +68,7 @@ const navItems=userNavLinks[user?.role || 'Attendee']
   </>
     return (
         <>
-        <div className="sticky h-[75px]  top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
- <Logo></Logo>
-        </div>
+       
        
         <aside className="hidden w-64 min-h-screen shrink-0 border-r border-default p-4 lg:block">
             {navLink}
