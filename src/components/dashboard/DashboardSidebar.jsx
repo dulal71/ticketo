@@ -1,101 +1,131 @@
-import {Button, Drawer} from "@heroui/react";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import Logo from "../Logo";
+import { Button, Drawer } from "@heroui/react";
 import { ImMenu } from "react-icons/im";
-import Image from "next/image";
+import { LuChevronLeft, LuChevronRight, LuChrome } from "react-icons/lu";
+
 import LogoutButton from "../LogoutButton";
-import { getSession } from "@/lib/api/userSession";
-import { ThemeSwitch } from "../ThemeSwitch";
 import { userNavLinks } from "./SidebarLinks";
-import { LuChrome } from "react-icons/lu";
 
-const DashboardSidebar =async () => {
-  const user = await getSession()
+const DashboardSidebar = ({ user }) => {
+  const [collapsed, setCollapsed] = useState(false);
 
-const navItems=userNavLinks[user?.role || 'Attendee']
-  const navLink=<>
-  <div className="mt-auto py-5 border-b border-default  flex items-center gap-3 px-3">
-      {user?.image ? (
-  <Image
-    width={60} 
-    height={60}
-    src={user.image} 
-    alt={user?.name || "User"} 
-   
-    className="size-15 rounded-full object-cover border border-default"
-  />
-) : (
-  
-  <div className="size-12 rounded-full bg-primary/20 text-primary flex items-center justify-center font-semibold text-lg">
-    {user?.name ? user.name[0].toUpperCase() : "U"}
-  </div>
-)}
-      
-      <div className="flex flex-col min-w-0">
-        <span className="text-xl font-medium text-foreground truncate">
-          {user?.name || "User Name"}
-        </span>
-        <span className="text-md text-muted truncate">
-          {user?.role }
-        </span>
-      </div>
-    </div>
-  <nav className="flex flex-col gap-1">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default"
-                    href={item.href}
-                  >
-                    <item.icon className="size-5 text-muted" />
-                    {item.label}
-                  </Link>
-                ))}
-                <div className="my-2 border-t border-default/50" />
-               
-                <Link
-        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default"
-        href="/"
+  const navItems = userNavLinks[user?.role || "Attendee"];
+
+  return (
+    <>
+      {/* ================= Desktop Sidebar ================= */}
+      <aside
+        className={`
+          hidden md:flex flex-col h-full
+          border-r border-default
+          transition-all duration-300 ease-in-out
+          ${collapsed ? "w-20" : "w-64"}
+        `}
       >
-        <LuChrome className="size-5 text-muted" />
-        Back to Home
-      </Link>
+        {/* Collapse Button */}
+        <div className="flex justify-end p-3">
+          <Button
+            isIconOnly
+            variant="light"
+            onPress={() => setCollapsed(!collapsed)}
+          >
+            {collapsed ? <LuChevronRight /> : <LuChevronLeft />}
+          </Button>
+        </div>
 
-      {/* Sign Out Button/Link */}
-   
-      <LogoutButton ></LogoutButton>
-              </nav>
-  </>
-    return (
-        <>
-       
-       
-        <aside className="hidden w-64 min-h-screen shrink-0 border-r border-default p-4 lg:block">
-            {navLink}
-        </aside>
-        <Drawer>
-          <div className="sticky top-0 z-50 w-full border-b border-white/5 bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
+        {/* Navigation */}
+        <nav className="flex flex-1 flex-col gap-1 px-3">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`
+                flex items-center rounded-xl px-3 py-2.5
+                hover:bg-default transition-all
+                ${collapsed ? "justify-center" : "gap-3"}
+              `}
+            >
+              <item.icon className="size-5 shrink-0" />
 
-<Button className="lg:hidden rounded-none" variant="outline" >
-       <ImMenu></ImMenu>
-        Menu
-      </Button>
-          </div>
-      
-      <Drawer.Backdrop>
+              {!collapsed && (
+                <span className="whitespace-nowrap">
+                  {item.label}
+                </span>
+              )}
+            </Link>
+          ))}
+
+          <div className="my-2 border-t border-default" />
+
+          <Link
+            href="/"
+            className={`
+              flex items-center rounded-xl px-3 py-2.5
+              hover:bg-default transition-all
+              ${collapsed ? "justify-center" : "gap-3"}
+            `}
+          >
+            <LuChrome className="size-5 shrink-0" />
+
+            {!collapsed && <span>Back to Home</span>}
+          </Link>
+
+          <LogoutButton collapsed={collapsed} />
+        </nav>
+      </aside>
+
+      {/* ================= Mobile Menu ================= */}
+      <Drawer>
+        <div className="border-b border-default p-3 md:hidden">
+          <Button
+            className="w-full justify-start gap-2"
+            variant="bordered"
+          >
+            <ImMenu className="size-4" />
+            Dashboard
+          </Button>
+        </div>
+
+        <Drawer.Backdrop />
+
         <Drawer.Content placement="left">
           <Drawer.Dialog>
             <Drawer.CloseTrigger />
-            <Drawer.Body >
-              {navLink}
+
+            <Drawer.Body>
+              <nav className="flex flex-col gap-1 mt-6">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-default transition-colors"
+                  >
+                    <item.icon className="size-5" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+
+                <div className="my-2 border-t border-default" />
+
+                <Link
+                  href="/"
+                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-default transition-colors"
+                >
+                  <LuChrome className="size-5" />
+                  <span>Back to Home</span>
+                </Link>
+
+                <LogoutButton />
+              </nav>
             </Drawer.Body>
           </Drawer.Dialog>
         </Drawer.Content>
-      </Drawer.Backdrop>
-    </Drawer>
-        </>
-        
-    );
+      </Drawer>
+    </>
+  );
 };
 
 export default DashboardSidebar;
