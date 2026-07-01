@@ -8,10 +8,11 @@ import { LuChevronLeft, LuChevronRight, LuChrome } from "react-icons/lu";
 
 import LogoutButton from "../LogoutButton";
 import { userNavLinks } from "./SidebarLinks";
+import { FaRegWindowClose } from "react-icons/fa";
 
 const DashboardSidebar = ({ user }) => {
   const [collapsed, setCollapsed] = useState(false);
-
+   const [mobileOpen, setMobileOpen] = useState(false);
   const navItems = userNavLinks[user?.role || "Attendee"];
 
   return (
@@ -19,9 +20,9 @@ const DashboardSidebar = ({ user }) => {
       {/* ================= Desktop Sidebar ================= */}
       <aside
         className={`
-          hidden md:flex flex-col h-full
+          hidden md:flex flex-col h-screen
           border-r border-default
-          transition-all duration-300 ease-in-out
+          transition-all duration-600 ease-in-out
           ${collapsed ? "w-20" : "w-64"}
         `}
       >
@@ -30,6 +31,7 @@ const DashboardSidebar = ({ user }) => {
           <Button
             isIconOnly
             variant="light"
+            className={'text-black dark:text-white'}
             onPress={() => setCollapsed(!collapsed)}
           >
             {collapsed ? <LuChevronRight /> : <LuChevronLeft />}
@@ -48,10 +50,10 @@ const DashboardSidebar = ({ user }) => {
                 ${collapsed ? "justify-center" : "gap-3"}
               `}
             >
-              <item.icon className="size-5 shrink-0" />
+              <item.icon className="size-5 shrink-0 text-black dark:text-white" />
 
               {!collapsed && (
-                <span className="whitespace-nowrap">
+                <span className="whitespace-nowrap text-black dark:text-white font-semibold">
                   {item.label}
                 </span>
               )}
@@ -63,12 +65,12 @@ const DashboardSidebar = ({ user }) => {
           <Link
             href="/"
             className={`
-              flex items-center rounded-xl px-3 py-2.5
+             text-black dark:text-white font-semibold flex items-center rounded-xl px-3 py-2.5
               hover:bg-default transition-all
               ${collapsed ? "justify-center" : "gap-3"}
             `}
           >
-            <LuChrome className="size-5 shrink-0" />
+            <LuChrome className="size-5 shrink-0 " />
 
             {!collapsed && <span>Back to Home</span>}
           </Link>
@@ -78,52 +80,55 @@ const DashboardSidebar = ({ user }) => {
       </aside>
 
       {/* ================= Mobile Menu ================= */}
-      <Drawer>
-        <div className="border-b border-default p-3 md:hidden">
-          <Button
-            className="w-full justify-start gap-2"
-            variant="bordered"
-          >
-            <ImMenu className="size-4" />
-            Dashboard
-          </Button>
-        </div>
+     <div className="md:hidden border-b border-default p-3">
+  <Button
+    onPress={() => setMobileOpen(!mobileOpen)}
+    className="w-full justify-start text-black dark:text-white"
+    variant="bordered"
+  >
+    {
+      mobileOpen ? <FaRegWindowClose className="size-4"/>: <ImMenu className="size-4" />
+    }
+    
+    Dashboard
+  </Button>
+</div>
 
-        <Drawer.Backdrop />
+{/* Mobile Sidebar */}
+<div
+  className={`
+    md:hidden
+    overflow-hidden
+    transition-all duration-300
+    ${mobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}
+  `}
+>
+  <nav className="border-b rounded-2xl border-default p-3">
+    {navItems.map((item) => (
+      <Link
+        key={item.label}
+        href={item.href}
+        className="flex items-center font-semibold text-black dark:text-white gap-3 rounded-xl px-3 py-2.5 hover:bg-default transition-colors"
+      >
+        <item.icon className="size-5 " />
+        <span >{item.label}</span>
+      </Link>
+    ))}
 
-        <Drawer.Content placement="left">
-          <Drawer.Dialog>
-            <Drawer.CloseTrigger />
+    <div className="my-2 border-t border-default" />
 
-            <Drawer.Body>
-              <nav className="flex flex-col gap-1 mt-6">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-default transition-colors"
-                  >
-                    <item.icon className="size-5" />
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
+    <Link
+      href="/"
+      className="flex items-center font-semibold text-black dark:text-white gap-3 rounded-xl px-3 py-2.5 hover:bg-default transition-colors"
+    >
+      <LuChrome className="size-5" />
+      <span>Back to Home</span>
+    </Link>
 
-                <div className="my-2 border-t border-default" />
-
-                <Link
-                  href="/"
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-default transition-colors"
-                >
-                  <LuChrome className="size-5" />
-                  <span>Back to Home</span>
-                </Link>
-
-                <LogoutButton />
-              </nav>
-            </Drawer.Body>
-          </Drawer.Dialog>
-        </Drawer.Content>
-      </Drawer>
+    <LogoutButton />
+  </nav>
+</div> 
+     
     </>
   );
 };

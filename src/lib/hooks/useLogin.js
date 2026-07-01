@@ -33,12 +33,6 @@ export default function useLogin() {
         toast.error(authError.message || "Registration failed!");
         return false;
       }
-
-      await sendEmail({
-        email,
-        name
-      });
-
       toast.success("Account created successfully!");
      router.push(redirectTo);
 

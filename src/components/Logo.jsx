@@ -7,7 +7,8 @@ const Logo = () => {
             <div className="bg-gradient-to-tr from-pink-500 to-indigo-500 p-2 rounded-lg text-white shadow-md shadow-pink-500/20">
                 <FaTicketAlt className="text-2xl" />
             </div>
-            <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-pink-500 bg-clip-text text-transparent">
+            <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-pink-500
+             dark:from-white dark:via-slate-200 dark:to-pink-500 bg-clip-text text-transparent">
                 Ticketo
             </span>
         </Link>

@@ -39,12 +39,6 @@ const user = session?.user
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  
-
-
-
-
-
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-white/5 bg-white/60 dark:bg-slate-950/65 backdrop-blur-md py-3.5 px-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
